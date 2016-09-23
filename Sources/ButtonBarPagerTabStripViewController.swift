@@ -49,13 +49,14 @@ public struct ButtonBarPagerTabStripSettings {
         public var buttonBarRightContentInset: CGFloat?
 
         public var selectedBarBackgroundColor = UIColor.black
-        public var selectedBarHeight: CGFloat = 5
+        public var selectedBarHeight: CGFloat = 3
         
         public var buttonBarItemBackgroundColor: UIColor?
         public var buttonBarItemFont = UIFont.systemFont(ofSize: 18)
         public var buttonBarItemLeftRightMargin: CGFloat = 8
         public var buttonBarItemTitleColor: UIColor?
         public var buttonBarItemsShouldFillAvailiableWidth = true
+        public var selectedButtonBarItemTitleColor: UIColor?
        
         // only used if button bar is created programaticaly and not using storyboards or nib files
         public var buttonBarHeight: CGFloat?
@@ -244,6 +245,10 @@ open class ButtonBarPagerTabStripViewController: PagerTabStripViewController, Pa
         
         let oldCell = buttonBarView.cellForItem(at: IndexPath(item: currentIndex, section: 0)) as? ButtonBarViewCell
         let newCell = buttonBarView.cellForItem(at: IndexPath(item: indexPath.item, section: 0)) as? ButtonBarViewCell
+        
+        oldCell?.label.textColor = self.settings.style.buttonBarItemTitleColor
+        newCell?.label.textColor = self.settings.style.selectedButtonBarItemTitleColor
+        
         if pagerBehaviour.isProgressiveIndicator {
             if let changeCurrentIndexProgressive = changeCurrentIndexProgressive {
                 changeCurrentIndexProgressive(oldCell, newCell, 1, true, true)
@@ -272,7 +277,11 @@ open class ButtonBarPagerTabStripViewController: PagerTabStripViewController, Pa
         
         cell.label.text = indicatorInfo.title
         cell.label.font = settings.style.buttonBarItemFont
-        cell.label.textColor = settings.style.buttonBarItemTitleColor ?? cell.label.textColor
+        if currentIndex == indexPath.item {
+            cell.label.textColor = settings.style.selectedButtonBarItemTitleColor ?? cell.label.textColor
+        } else {
+            cell.label.textColor = settings.style.buttonBarItemTitleColor ?? cell.label.textColor
+        }
         cell.contentView.backgroundColor = settings.style.buttonBarItemBackgroundColor ?? cell.contentView.backgroundColor
         cell.backgroundColor = settings.style.buttonBarItemBackgroundColor ?? cell.backgroundColor
         if let image = indicatorInfo.image {

@@ -45,7 +45,7 @@ open class ButtonBarView: UICollectionView {
         return bar
     }()
     
-    internal var selectedBarHeight: CGFloat = 4 {
+    internal var selectedBarHeight: CGFloat = 3 {
         didSet {
             self.updateSlectedBarYPosition()
         }
@@ -110,6 +110,8 @@ open class ButtonBarView: UICollectionView {
     }
     
     open func updateSelectedBarPosition(_ animated: Bool, swipeDirection: SwipeDirection, pagerScroll: PagerScroll) -> Void {
+        // Added to fix placement issues
+        selectedBar.frame.origin.y = self.frame.size.height - CGFloat(self.selectedBarHeight)
         var selectedBarFrame = selectedBar.frame
         
         let selectedCellIndexPath = IndexPath(item: selectedIndex, section: 0)
